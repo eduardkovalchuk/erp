@@ -1,0 +1,33 @@
+{% load static %}
+<head>
+	<link href="{% static 'manufacturing/vendor/bootstrap/css/bootstrap.css' %}" type="text/css" rel="stylesheet">
+    <title> Список машин </title>
+</head>
+<h2>Машини</h2>
+
+<table class="table table-striped table-bordered">
+	<thead class="thead-dark">
+		<tr>
+        	<th> # </th>
+			<th> Машина </th>
+			<th> Дільниця </th>
+			<th> Тип екструзії </th>
+			<th> Одиниці задавання </th>
+			<th> Інкапсуляція </th>
+			<th> Рециклінг</th>
+			<th> Кількість екструдерів </th>
+		</tr>
+	</thead>
+	{% for machine in query_set %}
+	<tr>
+        <th> {{ machine.id }} </th>
+		<td> {{ machine }} </td>
+		<td> {{ machine.division }} </td>
+		<td> {{ machine.extrusion_type }} </td>
+		<td> {{ machine.set_in }} </td>
+		<td> {{ machine.incapsulation }} </td>
+		<td> {{ machine.recycling }} </td>
+		<td> {{ machine.extruder_set.count }} </td>
+	</tr>
+	{% endfor %}
+</table>

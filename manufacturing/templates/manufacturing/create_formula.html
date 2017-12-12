@@ -1,0 +1,109 @@
+{% extends 'manufacturing/base.html' %}
+
+{% block title %} Створення формули{% endblock %}
+
+{% block create_formula %}
+
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#">Виробництво</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'manufacturing:formula_list' %}">Рецептурник</a>
+      </li>
+    <li class="breadcrumb-item active">Створення рецептури для {{ machine }}</li>
+</ol>
+
+<div class='warning'>
+    {% if extra_validation.name_validation is False %}
+    <p id="warning-text"> Рецептура з таким іменем вже існує! </p>
+    {% endif %}
+
+    {% if extra_validation.extruders_are_valid is False %}
+    <p id="warning-text"> Сума по екструдерам не дорівнює 100%! </p>
+    {% endif %}
+
+    {% if extra_validation.bc_are_valid is False %}
+    <p id="warning-text"> Сума в одному або кількох екструдерах по дозаторам не дорівнює 100%! </p>
+    {% endif %}
+
+    {% if extra_validation.bc_1_None_validation is False %}
+    <p id="warning-text"> В одному з дозаторів не заповнені сировина чи % вміст! </p>
+    {% endif %}
+</div>
+
+<form method="post">
+    {% if content_repeatance_tuple %}
+    <table class="warning-table">
+        <tr class="warning-table">
+            <td class="warning-table">
+            <p> Рецептура(и) з таким вмістом вже існує(ють): </p>
+            <ul>
+                {% for formula, content in content_repeatance_tuple %}
+                <li> {{ formula  }}, структура - {{ formula.structure }}, дата -  {{ formula.register_date }}</li>
+                {% endfor %}
+            </ul>
+            {{ form.confirm_repeatance }} {{ form.confirm_repeatance.label }} <br>
+        </td>
+        </tr>
+    </table>
+    {% endif %}
+
+
+    {% csrf_token %}
+    <table cellpadding=7 style="width:40%">
+    <tr>
+        <td>Машина</td>
+        <td>{{ machine }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.formula_name.label }}</td>
+        <td>{{ form.formula_name }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.structure.label }}</td>
+        <td>{{ form.structure }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.productivity.label }}</td>
+        <td>{{ form.productivity }}</td>
+    </tr>
+    </table>
+    <p></p>
+    <table  class="table table-bordered">
+        <thead>
+            <tr>
+                <th> Екструдер </th>
+                <th> Шару в структурі, % </th>
+                <th> Сировина </th>
+                <th> Сировини в шарі, % </th>
+            </tr>
+        </thead>
+        {% for label,extr_field,batchers,b_qty in field_list %}
+        <tr>
+            <td rowspan= {{ b_qty }}> {{ label }} </td>
+            <td rowspan= {{ b_qty }}> {{ extr_field }} </td>
+        </tr>
+        {% for perc, resin in batchers %}
+        <tr>
+            <td> {{ perc }} </td>
+            <td> {{ resin }} </td> 
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </table>
+    <table style="width: 100%">
+        <tr>
+            <td style="text-align:start">{{ form.description.label }}</td>
+            <td>{{ form.description }}</td>
+        </tr>
+        <tr>
+            <td style="text-align: right;" colspan=2><input type="submit" value="Записати"/></td>
+        </tr>
+    </table>
+</form>
+<p></p>
+
+{% endblock %}

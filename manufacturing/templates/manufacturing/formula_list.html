@@ -1,0 +1,70 @@
+{% extends 'manufacturing/base.html' %}
+
+{% block title %} Рецептурник {% endblock %}
+
+{% block formula_list %}
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+	<a href="#">Виробництво</a>
+  </li>
+  <li class="breadcrumb-item active">Рецептурник</li>
+</ol>
+
+<!--
+<div class="searchform">
+	<form method="get">
+		{% csrf_token %}
+		{{ search_form }} <input type="submit" value="Шукати"/>
+	</form>
+</div>
+
+
+<div class="createform">
+<form method="post">
+	{% csrf_token %}
+	 {{ crlick_2_create_form }} <input type="submit" value="Створити"/> 
+</form>
+</div> -->
+
+<table style="width: 100%;">
+	<tr>
+		<td><form method="post">{% csrf_token %}{{ crlick_2_create_form.machine.label }}{{ crlick_2_create_form.machine }} <input type="submit" value="Створити"/></form></td>
+		<td style="text-align: right;"><form method="get">{% csrf_token %}{{ search_form.search.label }}{{ search_form.search }} <input type="submit" value="Шукати"/></form></td>
+	</tr>
+</table>
+
+<!-- Таблиця з рецептурами -->
+<div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Таблиця рецептур </div>
+        <div class="card-body">
+          <div class="table-responsive">
+<table class="table table-striped table-bordered" id="formula_table">
+	<thead>
+		<tr>
+        	<th scope="col"> # </th>
+			<th scope="col"> Назва рецепту </th>
+			<th scope="col"> Структура </th>
+			<th scope="col"> Машина </th>
+			<th scope="col"> Дата реєстрації</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for formula in query_set %}
+		<tr>    
+        	<td scope="row"> <a href="{% url 'manufacturing:formula_detail' formula.id %}"> {{ formula.id }} </td>
+			<td> {{ formula.formula_name }} </td>
+			<td> {{ formula.structure }} </td>
+			<td> {{ formula.machine }} </td>
+			<td> {{ formula.register_date.year }}.{{ formula.register_date.month }}. {% if formula.register_date.day < 10 %}0{% endif %}{{ formula.register_date.day }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+</div>
+</div>
+
+{% endblock %}
