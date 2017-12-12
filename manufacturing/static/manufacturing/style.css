@@ -1,0 +1,22 @@
+#warning-text {
+    background-color: lightsalmon;
+    text-align: center;
+    font-size:16px;
+    font-family: verdana;
+    color: white;
+    padding: 10px;
+}
+
+
+table.warning-table {
+    width: 60%;
+}
+
+table.warning-table, td.warning-table {
+    border: 2px solid lightsalmon;
+    text-align: left;
+}
+
+.searchform {
+    text-align: right;
+}
